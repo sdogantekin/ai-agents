@@ -1,10 +1,16 @@
 import warnings
 warnings.filterwarnings('ignore')
 
-from crewai import Agent, Task, Crew, LLM
+from crewai import Agent, Task, Crew, LLM, Process
 from ApiKeys import get_openai_api_key, get_deepseek_api_key
 from crewai_tools import DirectoryReadTool, FileReadTool, SerperDevTool
 from crewai.tools import BaseTool
+from crewai.memory.short_term.short_term_memory import ShortTermMemory
+from crewai.memory.long_term.long_term_memory import LongTermMemory
+from crewai.memory.entity.entity_memory import EntityMemory
+from crewai.memory.storage.rag_storage import RAGStorage
+from crewai.memory.storage.ltm_sqlite_storage import LTMSQLiteStorage
+
 
 deepseekllm = LLM(model='deepseek/deepseek-chat',temperature=0.7,api_key=get_deepseek_api_key())
 
@@ -128,7 +134,7 @@ crew = Crew(
            personalized_outreach_task],
 	
     verbose=True,
-	##memory=True
+    ##memory=True,
 )
 
 inputs = {
