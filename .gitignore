@@ -4,3 +4,5 @@
 my_data_dir/entity_memory_storage.db
 my_data_dir/long_term_memory_storage.db
 my_data_dir/short_term_memory_storage.db
+venue_details.json
+marketing_report.md
