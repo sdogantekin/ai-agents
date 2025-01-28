@@ -6,6 +6,8 @@ from ApiKeys import get_openai_api_key, get_deepseek_api_key
 from crewai_tools import ScrapeWebsiteTool
 
 deepseekllm = LLM(model='deepseek/deepseek-chat',temperature=0.7,api_key=get_deepseek_api_key())
+import os
+os.environ["DEEPSEEK_API_KEY"] = get_deepseek_api_key()
 
 support_agent = Agent(
     role="Senior Support Representative",
@@ -101,7 +103,13 @@ crew = Crew(
   agents=[support_agent, support_quality_assurance_agent],
   tasks=[inquiry_resolution, quality_assurance_review],
   verbose=True,
-##memory=True
+  memory=True,
+      embedder={
+        "provider": "ollama",
+        "config": {
+            "model": "mxbai-embed-large"
+        }
+    }
 )
 
 inputs = {
