@@ -7,6 +7,9 @@ from ApiKeys import get_deepseek_api_key
 
 from crewai_tools import ScrapeWebsiteTool, SerperDevTool, FileReadTool, MDXSearchTool
 
+## local deepseek ##
+## deepseekLLM = LLM(model="ollama/deepseek-r1:1.5b",base_url="http://localhost:11434")
+
 search_tool = SerperDevTool()
 scrape_tool = ScrapeWebsiteTool()
 read_resume = FileReadTool(file_path="./test_resume.md")
@@ -169,12 +172,10 @@ job_application_crew = Crew(
             profiler,
             resume_strategist,
             interview_preparer],
-
     tasks=[research_task,
            profile_task,
            resume_strategy_task,
            interview_preparation_task],
-
     verbose=True
 )
 
