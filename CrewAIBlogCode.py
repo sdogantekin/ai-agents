@@ -2,19 +2,22 @@
 from crewai import Crew, Task, Agent, LLM
 from ApiKeys import get_deepseek_api_key
 from crewai_tools import ScrapeWebsiteTool
+from CustomDuckDuckGoTool import CustomDuckDuckGoTool
 
 deepseekllm = LLM(model='deepseek/deepseek-chat',temperature=1.0,api_key=get_deepseek_api_key())
 scrape_tool = ScrapeWebsiteTool()
+search_tool = CustomDuckDuckGoTool()
+
 
 job_analyzer = Agent(
     role='Job Analysis Specialist',
     goal='Analyze job descriptions thoroughly to extract key requirements and company culture',
     backstory="You are an experienced job market analyst with deep understanding of " 
-        "various industries and roles. You excel at breaking down job descriptions "
+        "various industries and roles. You excel at breaking down job descriptions and target company profiles "
         "to identify both explicit and implicit requirements.",
     verbose=True,
     allow_delegation=False,
-    tools=[scrape_tool],
+    tools=[scrape_tool, search_tool],
     llm=deepseekllm
 )
 
@@ -26,7 +29,7 @@ profile_analyzer = Agent(
         "skills and unique value propositions.",
     verbose=True,
     allow_delegation=False,
-    tools=[scrape_tool],
+    tools=[scrape_tool, search_tool],
     llm=deepseekllm
 )
 
@@ -47,10 +50,10 @@ analyze_job = Task(
         "1. Key technical requirements"
         "2. Soft skills and cultural fit indicators"
         "3. Implicit requirements and nice-to-haves"
-        "4. Company values and culture signals"
+        "4. Company business objectives, market position, values and culture signals"
         "Provide a structured analysis that can be used by the matching specialist.",
     expected_output="Structured analysis of job requirements including necessary "
-        "skills, qualifications experiences and company culture.",
+        "skills, qualifications experiences and company profile including culture.",
     agent=job_analyzer
 )
 
