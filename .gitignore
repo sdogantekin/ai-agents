@@ -18,3 +18,5 @@ AutomatedProject/.DS_Store
 .DS_Store
 .DS_Store
 CrewAICourse/ApiKeys.py
+ProjectProgressReport/trello.png
+ProjectProgressReport/__pycache__/CustomTrelloTool.cpython-312.pyc

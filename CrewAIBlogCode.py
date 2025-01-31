@@ -7,7 +7,7 @@ from CustomDuckDuckGoTool import CustomDuckDuckGoTool
 
 # in this example, we use the deepseek-chat model, but you can use any other model you have access to (even the local ones)
 deepseekllm = LLM(model='deepseek/deepseek-chat',temperature=1.0,api_key=get_deepseek_api_key())
-# llamaLLM = LLM(model="ollama/llama3.2",base_url="http://localhost:11434")
+# llamaLLM = LLM(model="ollama/llama3.2",base_url="http://localhost:11434") # sample reference to local LLama model
 
 # these are tools that we will assign to the agents
 scrape_tool = ScrapeWebsiteTool() # this tool will enable an agent to scrape a given website
@@ -53,26 +53,26 @@ matching_specialist = Agent(
 
 # this is the task that will analyze the job description, this task is assigned to the job_analyzer agent
 analyze_job = Task(
-    description="Analyze the job posting at {job_url}."
-        "Focus on:"
-        "1. Key technical requirements"
-        "2. Soft skills and cultural fit indicators"
-        "3. Implicit requirements and nice-to-haves"
-        "4. Company business objectives, market position, values and culture signals"
-        "Provide a structured analysis that can be used by the matching specialist.",
+    description="Analyze the job posting at {job_url} and the company associated with it."
+        "Focus on: "
+        "1. Key technical requirements "
+        "2. Soft skills and cultural fit indicators "
+        "3. Implicit requirements and nice-to-haves "
+        "4. Company business objectives, products, customers, market position, values and culture signals "
+        "Provide a structured analysis that can be used by the matching specialist. ",
     expected_output="Structured analysis of job requirements including necessary "
-        "skills, qualifications experiences and company profile including culture.",
+        "skills, qualifications experiences and company profile including its culture.",
     agent=job_analyzer
 )
 
 # this is the task that will analyze the candidate profile, this task is assigned to the profile_analyzer agent
 analyze_profile = Task(
     description="Analyze the candidate profile at {profile_url}."
-        "Focus on:"
-        "1. Technical skills and experience"
-        "2. Demonstrated soft skills"
-        "3. Career progression and achievements"
-        "4. Unique selling points"
+        "Focus on: "
+        "1. Technical skills and experience "
+        "2. Demonstrated soft skills and personality traits "
+        "3. Career progression and achievements "
+        "4. Unique selling points and personal brand "
         "Provide a structured analysis that can be used by the matching specialist.",
     expected_output="Structured analysis of candidate profile including key skills, experiences, contributions, interests, and "
         "communication style.", 
@@ -82,14 +82,14 @@ analyze_profile = Task(
 # this is the task that will provide matching advice, this task is assigned to the matching_specialist agent
 provide_matching_advice = Task(
     description="Using the analyses from both the job and profile specialists:"
-        "1. Evaluate the overall match percentage"
-        "2. Identify key strengths to emphasize"
-        "3. Point out gaps that need addressing"
-        "4. Provide specific recommendations for:"
-        "- Resume adjustments"
-        "- Cover letter points"
-        "- Interview preparation"
-        "- Skill development priorities"
+        "1. Evaluate the overall match percentage "
+        "2. Identify key strengths to emphasize "
+        "3. Point out gaps that need addressing "
+        "4. Provide specific recommendations for: "
+        "- Resume adjustments "
+        "- Cover letter points "
+        "- Interview preparation "
+        "- Skill development priorities "
         "Provide actionable advice that the candidate can implement immediately.",
     expected_output="Detailed matching advice including strengths, gaps, and "
         "recommendations for resume, cover letter, interview preparation, and skill development.",
@@ -107,7 +107,7 @@ application_crew = Crew(
 # this will make our crew to work on the given tasks using the given inputs
 result = application_crew.kickoff(
         inputs={
-            "job_url": "https://www.linkedin.com/jobs/view/4136748557",
-            "profile_url": "https://www.linkedin.com/in/serkandogantekin"
+            "job_url": "https://www.linkedin.com/jobs/view/4136748557", # job posting url
+            "profile_url": "https://www.linkedin.com/in/serkandogantekin" # candidate profile url
         }
     )
