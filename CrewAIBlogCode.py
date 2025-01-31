@@ -1,14 +1,19 @@
-## sample crea ai flow for the Medium blog post
+## sample crew ai flow for the Medium blog post
+## for more details, check --> https://github.com/sdogantekin/ai-agents
 from crewai import Crew, Task, Agent, LLM
 from ApiKeys import get_deepseek_api_key
 from crewai_tools import ScrapeWebsiteTool
 from CustomDuckDuckGoTool import CustomDuckDuckGoTool
 
+# in this example, we use the deepseek-chat model, but you can use any other model you have access to (even the local ones)
 deepseekllm = LLM(model='deepseek/deepseek-chat',temperature=1.0,api_key=get_deepseek_api_key())
-scrape_tool = ScrapeWebsiteTool()
-search_tool = CustomDuckDuckGoTool()
+# llamaLLM = LLM(model="ollama/llama3.2",base_url="http://localhost:11434")
 
+# these are tools that we will assign to the agents
+scrape_tool = ScrapeWebsiteTool() # this tool will enable an agent to scrape a given website
+search_tool = CustomDuckDuckGoTool() # this tool will enable an agent to search the web for a given query
 
+# this the agent that will analyze the job description
 job_analyzer = Agent(
     role='Job Analysis Specialist',
     goal='Analyze job descriptions thoroughly to extract key requirements and company culture',
@@ -21,6 +26,7 @@ job_analyzer = Agent(
     llm=deepseekllm
 )
 
+# this the agent that will analyze the candidate profile
 profile_analyzer = Agent(
     role='Profile Analysis Specialist',
     goal='Analyze candidate profiles to identify strengths, weaknesses, and unique selling points',
@@ -33,6 +39,7 @@ profile_analyzer = Agent(
     llm=deepseekllm
 )
 
+# this the agent that will provide matching advice
 matching_specialist = Agent(
     role='Career Matching Specialist',
     goal='Evaluate job-candidate fit and provide strategic application advice',
@@ -44,6 +51,7 @@ matching_specialist = Agent(
     llm=deepseekllm
 )
 
+# this is the task that will analyze the job description, this task is assigned to the job_analyzer agent
 analyze_job = Task(
     description="Analyze the job posting at {job_url}."
         "Focus on:"
@@ -57,6 +65,7 @@ analyze_job = Task(
     agent=job_analyzer
 )
 
+# this is the task that will analyze the candidate profile, this task is assigned to the profile_analyzer agent
 analyze_profile = Task(
     description="Analyze the candidate profile at {profile_url}."
         "Focus on:"
@@ -70,6 +79,7 @@ analyze_profile = Task(
     agent=profile_analyzer
 )
 
+# this is the task that will provide matching advice, this task is assigned to the matching_specialist agent
 provide_matching_advice = Task(
     description="Using the analyses from both the job and profile specialists:"
         "1. Evaluate the overall match percentage"
@@ -87,12 +97,14 @@ provide_matching_advice = Task(
     agent=matching_specialist
 )
 
+# this is our crew that will handle the all process
 application_crew = Crew(
     agents=[job_analyzer, profile_analyzer, matching_specialist],
     tasks=[analyze_job, analyze_profile, provide_matching_advice],
     verbose=True
 )
 
+# this will make our crew to work on the given tasks using the given inputs
 result = application_crew.kickoff(
         inputs={
             "job_url": "https://www.linkedin.com/jobs/view/4136748557",
