@@ -2,8 +2,8 @@ from crewai.tools import BaseTool
 from langchain_community.tools import DuckDuckGoSearchRun
 
 class CustomDuckDuckGoTool(BaseTool):
-    name: str = "DuckDuckGo Search Tool"
-    description: str = "Search the web for a given query."
+    name: str = "Search the internet with DuckDuckGo"
+    description: str = "A tool that can be used to search the internet with a search query."
 
     def _run(self, query: str) -> str:
         # Ensure the DuckDuckGoSearchRun is invoked properly.
