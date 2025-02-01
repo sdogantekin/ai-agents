@@ -53,14 +53,14 @@ matching_specialist = Agent(
 
 # this is the task that will analyze the job description, this task is assigned to the job_analyzer agent
 analyze_job = Task(
-    description="Analyze the job posting at {job_url} and the company associated with it."
+    description="Analyze the job posting at {job_url} and also the company related to it."
         "Focus on: "
         "1. Key technical requirements "
         "2. Soft skills and cultural fit indicators "
         "3. Implicit requirements and nice-to-haves "
-        "4. Company business objectives, products, customers, market position, values and culture signals "
+        "4. Company business objectives, products, target market segment, market position, customers, success stories, values and culture signals "
         "Provide a structured analysis that can be used by the matching specialist. ",
-    expected_output="Structured analysis of job requirements including necessary "
+    expected_output="Structured analysis of job requirements and target company including necessary "
         "skills, qualifications experiences and company profile including its culture.",
     agent=job_analyzer
 )
@@ -69,7 +69,7 @@ analyze_job = Task(
 analyze_profile = Task(
     description="Analyze the candidate profile at {profile_url}."
         "Focus on: "
-        "1. Technical skills and experience "
+        "1. Technical skills, experience and education"
         "2. Demonstrated soft skills and personality traits "
         "3. Career progression and achievements "
         "4. Unique selling points and personal brand "
