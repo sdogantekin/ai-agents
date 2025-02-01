@@ -14,9 +14,9 @@ scrape_tool = ScrapeWebsiteTool() # this tool will enable an agent to scrape a g
 search_tool = CustomDuckDuckGoTool() # this tool will enable an agent to search the web for a given query
 
 # this the agent that will analyze the job description
-job_analyzer = Agent(
+job_analysis_specialist = Agent(
     role='Job Analysis Specialist',
-    goal='Analyze job descriptions thoroughly to extract key requirements and company culture',
+    goal='Analyze job descriptions thoroughly to extract key requirements and company profile',
     backstory="You are an experienced job market analyst with deep understanding of " 
         "various industries and roles. You excel at breaking down job descriptions and target company profiles "
         "to identify both explicit and implicit requirements.",
@@ -27,7 +27,7 @@ job_analyzer = Agent(
 )
 
 # this the agent that will analyze the candidate profile
-profile_analyzer = Agent(
+profile_analysis_specialist = Agent(
     role='Profile Analysis Specialist',
     goal='Analyze candidate profiles to identify strengths, weaknesses, and unique selling points',
     backstory="You are a career coach with years of experience in helping professionals "
@@ -40,7 +40,7 @@ profile_analyzer = Agent(
 )
 
 # this the agent that will provide matching advice
-matching_specialist = Agent(
+career_matching_specialist = Agent(
     role='Career Matching Specialist',
     goal='Evaluate job-candidate fit and provide strategic application advice',
     backstory="You are a senior career advisor who specializes in helping candidates "
@@ -62,21 +62,21 @@ analyze_job = Task(
         "Provide a structured analysis that can be used by the matching specialist. ",
     expected_output="Structured analysis of job requirements and target company including necessary "
         "skills, qualifications experiences and company profile including its culture.",
-    agent=job_analyzer
+    agent=job_analysis_specialist
 )
 
 # this is the task that will analyze the candidate profile, this task is assigned to the profile_analyzer agent
 analyze_profile = Task(
     description="Analyze the candidate profile at {profile_url}."
         "Focus on: "
-        "1. Technical skills, experience and education"
+        "1. Technical skills, experience and education "
         "2. Demonstrated soft skills and personality traits "
         "3. Career progression and achievements "
         "4. Unique selling points and personal brand "
         "Provide a structured analysis that can be used by the matching specialist.",
-    expected_output="Structured analysis of candidate profile including key skills, experiences, contributions, interests, and "
+    expected_output="Structured analysis of candidate profile including key skills, experiences, contributions, interests and "
         "communication style.", 
-    agent=profile_analyzer
+    agent=profile_analysis_specialist
 )
 
 # this is the task that will provide matching advice, this task is assigned to the matching_specialist agent
@@ -91,15 +91,15 @@ provide_matching_advice = Task(
         "- Interview preparation "
         "- Skill development priorities "
         "Provide actionable advice that the candidate can implement immediately.",
-    expected_output="Detailed matching advice including strengths, gaps, and "
-        "recommendations for resume, cover letter, interview preparation, and skill development.",
+    expected_output="Detailed matching advice including strengths, gaps and "
+        "recommendations for resume, cover letter, interview preparation and skill development.",
     context=[analyze_job, analyze_profile],
-    agent=matching_specialist
+    agent=career_matching_specialist
 )
 
 # this is our crew that will handle the all process
 application_crew = Crew(
-    agents=[job_analyzer, profile_analyzer, matching_specialist],
+    agents=[job_analysis_specialist, profile_analysis_specialist, career_matching_specialist],
     tasks=[analyze_job, analyze_profile, provide_matching_advice],
     verbose=True
 )
