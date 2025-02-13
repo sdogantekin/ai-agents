@@ -21,8 +21,6 @@ report_generation:
   description: >
     Compile a comprehensive sprint report based on the analysis
     of the project data.
-
-
     The report should include:
     - Sprint Overview
     - Task Summary

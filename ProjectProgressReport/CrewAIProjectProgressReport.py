@@ -2,9 +2,7 @@
 import warnings
 warnings.filterwarnings('ignore')
 
-import os
 import yaml
-import json
 from crewai import Crew, Task, Agent, LLM
 from ApiKeys import get_deepseek_api_key
 from CustomTrelloTool import BoardDataFetcherTool, CardDataFetcherTool
@@ -22,18 +20,18 @@ for config_type, file_path in files.items():
 agents_config = configs['agents']
 tasks_config = configs['tasks']
 
-deepseelLLM = LLM(model='deepseek/deepseek-chat', temperature=1.0, api_key=get_deepseek_api_key())
+deepseekLLM = LLM(model='deepseek/deepseek-chat', temperature=1.0, api_key=get_deepseek_api_key())
 
 # Creating Agents
 data_collection_agent = Agent(
   config=agents_config['data_collection_agent'],
   tools=[BoardDataFetcherTool(), CardDataFetcherTool()],
-  llm=deepseelLLM
+  llm=deepseekLLM
 )
 
 analysis_agent = Agent(
   config=agents_config['analysis_agent'],
-  llm=deepseelLLM
+  llm=deepseekLLM
 )
 
 # Creating Tasks
